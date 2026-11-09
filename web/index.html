@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Реестр оборудования — ТОиР</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- ========================================================
+         1. ТОПБАР И НАВИГАЦИЯ
+         ======================================================== -->
+    <header class="topbar">
+        <div class="container topbar__inner">
+            <h1 class="logo">ТОиР · Реестр оборудования</h1>
+            <nav class="nav">
+                <button class="nav__btn is-active" data-tab="list">Реестр</button>
+                <button class="nav__btn" data-tab="add">Добавить оборудование</button>
+                <button class="nav__btn" data-tab="schedule">План-график ТОиР</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container main">
+
+        <!-- ====================================================
+             2. СПИСОК ОБОРУДОВАНИЯ (ВКЛАДКА «РЕЕСТР»)
+             ==================================================== -->
+        <section id="tab-list" class="tab is-active">
+
+            <!-- 2.1. Тулбар фильтров -->
+            <div class="toolbar">
+                <div class="toolbar__field">
+                    <label for="filter-status">Статус</label>
+                    <select id="filter-status">
+                        <option value="">Все</option>
+                        <!-- заполняется из /api/equipment-statuses -->
+                    </select>
+                </div>
+
+                <div class="toolbar__field">
+                    <label for="filter-type">Тип оборудования</label>
+                    <select id="filter-type">
+                        <option value="">Все</option>
+                        <!-- заполняется из /api/equipment-types -->
+                    </select>
+                </div>
+
+                <div class="toolbar__field">
+                    <label for="filter-manufacturer">Производитель</label>
+                    <select id="filter-manufacturer">
+                        <option value="">Все</option>
+                        <!-- заполняется из /api/manufacturers -->
+                    </select>
+                </div>
+
+                <div class="toolbar__field">
+                    <label for="filter-model">Модель</label>
+                    <select id="filter-model">
+                        <option value="">Все</option>
+                        <!-- заполняется из /api/equipment-models -->
+                    </select>
+                </div>
+
+                <button id="refresh-btn" class="btn btn--ghost" title="Обновить">↻ Обновить</button>
+            </div>
+
+            <!-- 2.2. Таблица реестра -->
+            <div class="table-wrap">
+                <table class="table" id="equipment-table">
+                    <thead>
+                        <tr>
+                            <th>Инв. №</th>
+                            <th>Тип</th>
+                            <th>Производитель</th>
+                            <th>Модель</th>
+                            <th>Заводской №</th>
+                            <th>Ввод в экспл.</th>
+                            <th>Статус</th>
+                            <th>Комментарий</th>
+                        </tr>
+                    </thead>
+                    <tbody id="equipment-tbody">
+                        <!-- заполняется из /api/equipments -->
+                    </tbody>
+                </table>
+            </div>
+
+            <p class="muted" id="list-info"></p>
+        </section>
+
+        <!-- ====================================================
+             3. ФОРМА ДОБАВЛЕНИЯ ОБОРУДОВАНИЯ (ВКЛАДКА «ДОБАВИТЬ»)
+             ==================================================== -->
+        <section id="tab-add" class="tab">
+
+            <!-- 3.1. Основная форма -->
+            <div class="card">
+                <h2 class="card__title">Новое оборудование</h2>
+                <p class="muted">
+                    Сначала выбирается тип и производитель — затем список моделей
+                    фильтруется автоматически. Если нужного производителя или
+                    модели нет в списке, добавьте их в соответствующих полях ниже.
+                </p>
+
+                <form id="equipment-form" class="form" autocomplete="off">
+
+                    <div class="form__row">
+                        <div class="form__field">
+                            <label for="add-type">Тип оборудования *</label>
+                            <select id="add-type" required>
+                                <option value="">— выберите —</option>
+                            </select>
+                        </div>
+
+                        <div class="form__field">
+                            <label for="add-manufacturer">Производитель *</label>
+                            <select id="add-manufacturer" required>
+                                <option value="">— выберите —</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form__row">
+                        <div class="form__field">
+                            <label for="add-model">Модель *</label>
+                            <select id="add-model" required>
+                                <option value="">— сначала выберите тип и производителя —</option>
+                            </select>
+                        </div>
+
+                        <div class="form__field">
+                            <label for="add-status">Статус *</label>
+                            <select id="add-status" required>
+                                <!-- заполняется из /api/equipment-statuses -->
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form__row">
+                        <div class="form__field">
+                            <label for="add-inventory">Инвентарный номер *</label>
+                            <input type="text" id="add-inventory" required maxlength="50"
+                                placeholder="Например, ST-100">
+                        </div>
+
+                        <div class="form__field">
+                            <label for="add-serial">Заводской номер</label>
+                            <input type="text" id="add-serial" maxlength="100" placeholder="Например, SN-NEW-100">
+                        </div>
+                    </div>
+
+                    <div class="form__row">
+                        <div class="form__field">
+                            <label for="add-date">Дата ввода в эксплуатацию</label>
+                            <input type="date" id="add-date">
+                        </div>
+
+                        <div class="form__field">
+                            <label for="add-comment">Комментарий</label>
+                            <input type="text" id="add-comment" placeholder="Место установки, примечание">
+                        </div>
+                    </div>
+
+                    <div class="form__actions">
+                        <button type="submit" class="btn btn--primary">Сохранить</button>
+                        <button type="reset" class="btn btn--ghost">Очистить</button>
+                    </div>
+
+                    <div id="form-message" class="message" hidden></div>
+                </form>
+            </div>
+
+            <!-- 3.2. Быстрое добавление справочников -->
+            <div class="card card--secondary">
+                <h2 class="card__title">Быстро добавить справочник</h2>
+                <p class="muted">
+                    Если нужного типа, производителя или модели нет в выпадающих
+                    списках — добавьте их здесь, не покидая страницу.
+                </p>
+
+                <div class="quick-grid">
+                    <form id="quick-type-form" class="quick-form">
+                        <h3>Тип оборудования</h3>
+                        <input type="text" name="name" placeholder="Название *" required>
+                        <input type="text" name="description" placeholder="Описание">
+                        <button type="submit" class="btn btn--small">Добавить тип</button>
+                    </form>
+
+                    <form id="quick-manufacturer-form" class="quick-form">
+                        <h3>Производитель</h3>
+                        <input type="text" name="name" placeholder="Название *" required>
+                        <input type="text" name="country" placeholder="Страна">
+                        <input type="text" name="contact_info" placeholder="Контакты">
+                        <button type="submit" class="btn btn--small">Добавить производителя</button>
+                    </form>
+
+                    <form id="quick-model-form" class="quick-form">
+                        <h3>Модель</h3>
+                        <select name="equipment_type_id" required>
+                            <option value="">Тип *</option>
+                        </select>
+                        <select name="manufacturer_id" required>
+                            <option value="">Производитель *</option>
+                        </select>
+                        <input type="text" name="name" placeholder="Название *" required>
+                        <input type="text" name="model_code" placeholder="Код модели">
+                        <button type="submit" class="btn btn--small">Добавить модель</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- ====================================================
+             4. ПЛАН-ГРАФИК ТО/ТР/КР (ВКЛАДКА «ПЛАН-ГРАФИК»)
+             ==================================================== -->
+        <section id="tab-schedule" class="tab">
+
+            <!-- 4.1. Тулбар управления -->
+            <div class="toolbar">
+                <div class="toolbar__field">
+                    <label for="sched-horizon">Горизонт планирования</label>
+                    <select id="sched-horizon">
+                        <option value="30">1 месяц</option>
+                        <option value="90" selected>3 месяца</option>
+                        <option value="180">6 месяцев</option>
+                        <option value="365">1 год</option>
+                    </select>
+                </div>
+
+                <div class="toolbar__field">
+                    <label>Вид работ</label>
+                    <div class="checkgroup" id="sched-codes">
+                        <label><input type="checkbox" value="TO" checked> ТО</label>
+                        <label><input type="checkbox" value="TR" checked> ТР</label>
+                        <label><input type="checkbox" value="KR" checked> КР</label>
+                    </div>
+                </div>
+
+                <div class="toolbar__field toolbar__field--view">
+                    <label>Отображение</label>
+                    <div class="view-toggle">
+                        <button type="button" class="view-btn is-active" data-view="table">Таблица</button>
+                        <button type="button" class="view-btn" data-view="calendar">Календарь</button>
+                    </div>
+                </div>
+
+                <button id="sched-refresh" class="btn btn--ghost">↻ Обновить</button>
+            </div>
+
+            <!-- 4.2. Представление: ТАБЛИЦА -->
+            <div id="schedule-view-table">
+                <div class="table-wrap">
+                    <table class="table" id="schedule-table">
+                        <thead>
+                            <tr>
+                                <th>Дата</th>
+                                <th>Оборудование</th>
+                                <th>Тип</th>
+                                <th>Производитель</th>
+                                <th>Модель</th>
+                                <th>Работа</th>
+                            </tr>
+                        </thead>
+                        <tbody id="schedule-tbody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- 4.3. Представление: КАЛЕНДАРЬ -->
+            <div id="schedule-view-calendar" hidden>
+                <div class="calendar">
+                    <div class="calendar__header">
+                        <button type="button" id="cal-prev" class="cal-btn" aria-label="Предыдущий месяц">←</button>
+                        <div id="calendar-title" class="calendar__title"></div>
+                        <button type="button" id="cal-today" class="cal-btn">Сегодня</button>
+                        <button type="button" id="cal-next" class="cal-btn" aria-label="Следующий месяц">→</button>
+                    </div>
+
+                    <div class="calendar__weekdays">
+                        <div>Пн</div>
+                        <div>Вт</div>
+                        <div>Ср</div>
+                        <div>Чт</div>
+                        <div>Пт</div>
+                        <div>Сб</div>
+                        <div>Вс</div>
+                    </div>
+
+                    <div class="calendar__grid" id="calendar-grid"></div>
+                </div>
+
+                <div class="calendar__legend">
+                    <span class="legend-item"><span class="badge badge--TO">TO</span> Технический осмотр</span>
+                    <span class="legend-item"><span class="badge badge--TR">TR</span> Технический ремонт</span>
+                    <span class="legend-item"><span class="badge badge--KR">KR</span> Капитальный ремонт</span>
+                </div>
+            </div>
+
+            <p class="muted" id="schedule-info"></p>
+        </section>
+    </main>
+
+
+    <!-- ========================================================
+         5. МОДАЛЬНОЕ ОКНО РЕДАКТИРОВАНИЯ ОБОРУДОВАНИЯ
+         ======================================================== -->
+    <div id="edit-modal" class="modal" hidden>
+        <div class="modal__backdrop" data-close></div>
+
+        <div class="modal__dialog" role="dialog" aria-modal="true">
+            <header class="modal__header">
+                <h2 class="modal__title">Редактирование оборудования</h2>
+                <button type="button" class="modal__close" data-close aria-label="Закрыть">×</button>
+            </header>
+
+            <form id="edit-form" class="form" autocomplete="off">
+                <input type="hidden" id="edit-id">
+
+                <!-- 5.1. Статичная информация: модель и ближайшие работы -->
+                <div class="form__field" style="margin-bottom: 12px;">
+                    <label>Тип / производитель / модель</label>
+                    <div id="edit-static-model" class="static-info">—</div>
+                </div>
+                <div class="form__field" style="margin-bottom: 16px;">
+                    <label>Ближайшие ТО / ТР / КР</label>
+                    <div id="edit-schedule" class="static-info">
+                        <span class="muted">—</span>
+                    </div>
+                </div>
+
+                <!-- 5.2. Паспортные поля -->
+                <div class="form__row">
+                    <div class="form__field">
+                        <label for="edit-inventory">Инвентарный номер *</label>
+                        <input type="text" id="edit-inventory" required maxlength="50">
+                    </div>
+                    <div class="form__field">
+                        <label for="edit-serial">Заводской номер</label>
+                        <input type="text" id="edit-serial" maxlength="100">
+                    </div>
+                </div>
+
+                <div class="form__row">
+                    <div class="form__field">
+                        <label for="edit-date">Дата ввода в эксплуатацию</label>
+                        <input type="date" id="edit-date">
+                    </div>
+                    <div class="form__field">
+                        <label for="edit-status">Статус *</label>
+                        <select id="edit-status" required></select>
+                    </div>
+                </div>
+
+                <div class="form__field" style="margin-bottom: 16px;">
+                    <label for="edit-comment">Комментарий</label>
+                    <input type="text" id="edit-comment">
+                </div>
+
+                <div class="form__actions">
+                    <button type="submit" class="btn btn--primary">Сохранить</button>
+                    <button type="button" class="btn btn--ghost" data-close>Отмена</button>
+                </div>
+
+                <div id="edit-message" class="message" hidden></div>
+            </form>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>

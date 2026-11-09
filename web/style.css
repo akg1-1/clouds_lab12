@@ -1,0 +1,815 @@
+/* ============================================================
+   1. ПЕРЕМЕННЫЕ И БАЗОВЫЕ СТИЛИ
+   ============================================================ */
+
+:root {
+    --bg: #f4f6f8;
+    --surface: #ffffff;
+    --border: #e2e6ea;
+    --text: #1f2a37;
+    --muted: #6b7280;
+    --primary: #2563eb;
+    --primary-hover: #1d4ed8;
+    --success: #16a34a;
+    --danger: #dc2626;
+    --warning: #d97706;
+    --radius: 8px;
+    --shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+        "Helvetica Neue", Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+
+/* ============================================================
+   2. ТОПБАР И НАВИГАЦИЯ
+   ============================================================ */
+
+.topbar {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.topbar__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+}
+
+.logo {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.nav {
+    display: flex;
+    gap: 8px;
+}
+
+.nav__btn {
+    background: transparent;
+    border: none;
+    padding: 8px 16px;
+    border-radius: var(--radius);
+    color: var(--muted);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+}
+
+.nav__btn:hover {
+    background: var(--bg);
+    color: var(--text);
+}
+
+.nav__btn.is-active {
+    background: var(--primary);
+    color: #fff;
+}
+
+
+/* ============================================================
+   3. ОСНОВНАЯ ОБЛАСТЬ И ВКЛАДКИ
+   ============================================================ */
+
+.main {
+    padding-top: 24px;
+    padding-bottom: 48px;
+}
+
+.tab {
+    display: none;
+}
+
+.tab.is-active {
+    display: block;
+}
+
+
+/* ============================================================
+   4. ТУЛБАР ФИЛЬТРОВ
+   ============================================================ */
+
+.toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: flex-end;
+    margin-bottom: 16px;
+    background: var(--surface);
+    padding: 16px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+}
+
+.toolbar__field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 180px;
+    flex: 1 1 180px;
+}
+
+.toolbar__field label {
+    font-size: 12px;
+    color: var(--muted);
+    font-weight: 500;
+}
+
+.toolbar select {
+    padding: 8px 10px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    font-size: 14px;
+    background: #fff;
+    color: var(--text);
+}
+
+.toolbar select:focus,
+.form input:focus,
+.form select:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+
+/* ============================================================
+   5. КНОПКИ
+   ============================================================ */
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 9px 16px;
+    border-radius: var(--radius);
+    border: 1px solid transparent;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
+    white-space: nowrap;
+}
+
+.btn--primary {
+    background: var(--primary);
+    color: #fff;
+}
+
+.btn--primary:hover {
+    background: var(--primary-hover);
+}
+
+.btn--ghost {
+    background: transparent;
+    border-color: var(--border);
+    color: var(--text);
+}
+
+.btn--ghost:hover {
+    background: var(--bg);
+}
+
+.btn--small {
+    padding: 7px 12px;
+    font-size: 13px;
+    background: var(--primary);
+    color: #fff;
+}
+
+.btn--small:hover {
+    background: var(--primary-hover);
+}
+
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+
+/* ============================================================
+   6. ТАБЛИЦА
+   ============================================================ */
+
+.table-wrap {
+    background: var(--surface);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow-x: auto;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+.table thead th {
+    text-align: left;
+    padding: 12px 14px;
+    font-weight: 600;
+    background: #f9fafb;
+    color: var(--muted);
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+}
+
+.table tbody td {
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+}
+
+.table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.table tbody tr:hover {
+    background: #f9fafb;
+}
+
+.table .empty {
+    text-align: center;
+    color: var(--muted);
+    padding: 32px 14px;
+}
+
+
+/* ============================================================
+   7. БЕЙДЖИ СТАТУСОВ
+   ============================================================ */
+
+.badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1.4;
+}
+
+.badge--active {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.badge--repair {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.badge--decommissioned {
+    background: #e5e7eb;
+    color: #374151;
+}
+
+
+/* ============================================================
+   8. КАРТОЧКИ
+   ============================================================ */
+
+.card {
+    background: var(--surface);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 24px;
+    margin-bottom: 24px;
+    max-width: 900px;
+}
+
+.card--secondary {
+    background: #f9fafb;
+}
+
+.card__title {
+    margin: 0 0 8px;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.muted {
+    color: var(--muted);
+    font-size: 13px;
+    margin: 0 0 16px;
+}
+
+
+/* ============================================================
+   9. ФОРМЫ
+   ============================================================ */
+
+.form__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.form__field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.form__field label {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+}
+
+.form input,
+.form select {
+    padding: 9px 12px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    font-size: 14px;
+    background: #fff;
+    color: var(--text);
+    font-family: inherit;
+}
+
+.form__actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 8px;
+}
+
+
+/* ============================================================
+   10. СООБЩЕНИЯ
+   ============================================================ */
+
+.message {
+    margin-top: 16px;
+    padding: 12px 16px;
+    border-radius: var(--radius);
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.message--success {
+    background: #dcfce7;
+    color: #166534;
+    border: 1px solid #bbf7d0;
+}
+
+.message--error {
+    background: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #fecaca;
+}
+
+
+/* ============================================================
+   11. БЫСТРЫЕ ФОРМЫ СПРАВОЧНИКОВ
+   ============================================================ */
+
+.quick-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+}
+
+.quick-form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px;
+}
+
+.quick-form h3 {
+    margin: 0 0 4px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.quick-form input,
+.quick-form select {
+    padding: 8px 10px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    font-size: 13px;
+    font-family: inherit;
+}
+
+.quick-form input:focus,
+.quick-form select:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+
+/* ============================================================
+   12. КЛИКАБЕЛЬНАЯ СТРОКА ТАБЛИЦЫ
+   ============================================================ */
+
+.table tbody tr {
+    cursor: pointer;
+}
+
+.table tbody tr:hover {
+    background: #eef2ff;
+}
+
+
+/* ============================================================
+   13. МОДАЛЬНОЕ ОКНО
+   ============================================================ */
+
+.modal {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 48px 16px;
+    z-index: 100;
+    overflow-y: auto;
+}
+
+.modal[hidden] {
+    display: none;
+}
+
+.modal__backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.45);
+    z-index: 0;
+}
+
+.modal__dialog {
+    position: relative;
+    z-index: 1;
+    background: var(--surface);
+    border-radius: var(--radius);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    width: 100%;
+    max-width: 720px;
+    padding: 24px;
+    animation: modal-in 0.15s ease-out;
+}
+
+@keyframes modal-in {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modal__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+}
+
+.modal__title {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.modal__close {
+    background: transparent;
+    border: none;
+    font-size: 26px;
+    line-height: 1;
+    color: var(--muted);
+    cursor: pointer;
+    padding: 0 6px;
+    border-radius: var(--radius);
+}
+
+.modal__close:hover {
+    color: var(--text);
+    background: var(--bg);
+}
+
+body.modal-open {
+    overflow: hidden;
+}
+
+
+/* ============================================================
+   14. ДОПОЛНИТЕЛЬНЫЕ ЭЛЕМЕНТЫ ФОРМ (статика, чекбоксы)
+   ============================================================ */
+
+/* Плашка «Тип / производитель / модель» — только чтение */
+.static-info {
+    padding: 9px 12px;
+    background: #f3f4f6;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--muted);
+    font-size: 14px;
+}
+
+/* Явно прячем модалку по атрибуту hidden */
+.modal[hidden] {
+    display: none !important;
+}
+
+.checkgroup {
+    display: flex;
+    gap: 12px;
+    padding: 6px 0;
+}
+
+.checkgroup label {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 14px;
+    color: var(--text);
+    cursor: pointer;
+}
+
+
+/* ============================================================
+   15. БЕЙДЖИ ВИДОВ РАБОТ И РАСПИСАНИЕ
+   ============================================================ */
+
+.badge--TO {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.badge--TR {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.badge--KR {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.schedule-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 4px;
+}
+
+.schedule-row .schedule-item {
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    background: #eef2ff;
+    color: #3730a3;
+    white-space: nowrap;
+}
+
+.schedule-row .schedule-item strong {
+    margin-right: 4px;
+    color: #1e1b4b;
+}
+
+
+/* ============================================================
+   16. ПЕРЕКЛЮЧАТЕЛЬ «ТАБЛИЦА / КАЛЕНДАРЬ»
+   ============================================================ */
+
+.toolbar__field--view {
+    min-width: auto;
+    flex: 0 0 auto;
+}
+
+.view-toggle {
+    display: inline-flex;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 2px;
+}
+
+.view-btn {
+    background: transparent;
+    border: none;
+    padding: 7px 14px;
+    border-radius: calc(var(--radius) - 2px);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--muted);
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+}
+
+.view-btn:hover {
+    color: var(--text);
+}
+
+.view-btn.is-active {
+    background: var(--surface);
+    color: var(--text);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+}
+
+
+/* ============================================================
+   17. КАЛЕНДАРЬ
+   ============================================================ */
+
+.calendar {
+    background: var(--surface);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 16px;
+    margin-bottom: 16px;
+}
+
+.calendar__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.calendar__title {
+    font-size: 16px;
+    font-weight: 600;
+    text-transform: capitalize;
+    min-width: 180px;
+    text-align: center;
+}
+
+.cal-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    padding: 6px 12px;
+    border-radius: var(--radius);
+    cursor: pointer;
+    color: var(--text);
+    font-size: 13px;
+    transition: background 0.15s;
+}
+
+.cal-btn:hover {
+    background: var(--bg);
+}
+
+.calendar__weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+    margin-bottom: 4px;
+}
+
+.calendar__weekdays>div {
+    text-align: center;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--muted);
+    padding: 6px 0;
+}
+
+.calendar__grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+}
+
+.calendar__day {
+    min-height: 100px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 6px;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 12px;
+    overflow: hidden;
+}
+
+.calendar__day--empty {
+    background: #f9fafb;
+    border-color: #f3f4f6;
+}
+
+.calendar__day--today {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 1px var(--primary) inset;
+    background: #eff6ff;
+}
+
+.calendar__day-num {
+    font-weight: 600;
+    color: var(--text);
+    font-size: 12px;
+}
+
+.calendar__event {
+    display: block;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 1.3;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: default;
+}
+
+.calendar__event.badge--TO {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.calendar__event.badge--TR {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.calendar__event.badge--KR {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.calendar__legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding: 12px 4px;
+    font-size: 13px;
+    color: var(--muted);
+}
+
+.legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+
+/* ============================================================
+   18. АДАПТИВНОСТЬ
+   ============================================================ */
+
+@media (max-width: 720px) {
+    .topbar__inner {
+        flex-direction: column;
+        height: auto;
+        padding: 12px 0;
+        gap: 8px;
+    }
+
+    .form__row {
+        grid-template-columns: 1fr;
+    }
+
+    .toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}
+
+@media (max-width: 720px) {
+    .calendar__day {
+        min-height: 72px;
+        font-size: 11px;
+    }
+
+    .calendar__event {
+        font-size: 10px;
+        padding: 1px 4px;
+    }
+}
